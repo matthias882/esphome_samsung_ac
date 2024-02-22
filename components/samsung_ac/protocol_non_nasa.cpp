@@ -501,8 +501,9 @@ namespace esphome
                 // TODO
                 target->set_swing_horizontal(nonpacket_.src, false);
                 target->set_swing_vertical(nonpacket_.src, false);
+                send_requests(target, 20);
             }
-            else if (nonpacket_.cmd == NonNasaCommand::CmdF8)
+            /*else if (nonpacket_.cmd == NonNasaCommand::CmdF8)
             {
                 // After cmd F8 (src:c8 dst:f0) is a lage gap in communication, time to send data. Some systems did not sent that.
                 if (nonpacket_.src == "c8" && nonpacket_.dst == "f0")
@@ -520,7 +521,7 @@ namespace esphome
                 {
                     send_requests(target, 20);
                 }
-            }
+            }*/
         }
     } // namespace samsung_ac
 } // namespace esphome
