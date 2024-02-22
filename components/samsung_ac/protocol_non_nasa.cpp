@@ -490,6 +490,7 @@ namespace esphome
 
             if (nonpacket_.cmd == NonNasaCommand::Cmd20)
             {
+                send_requests(target, 20);
                 last_command20s_[nonpacket_.src] = nonpacket_.command20;
                 target->set_target_temperature(nonpacket_.src, nonpacket_.command20.target_temp);
                 target->set_room_temperature(nonpacket_.src, nonpacket_.command20.room_temp);
@@ -501,7 +502,6 @@ namespace esphome
                 // TODO
                 target->set_swing_horizontal(nonpacket_.src, false);
                 target->set_swing_vertical(nonpacket_.src, false);
-                send_requests(target, 20);
             }
             /*else if (nonpacket_.cmd == NonNasaCommand::CmdF8)
             {
