@@ -879,6 +879,7 @@ namespace esphome
                 // We have received a request_control message. This is a message outdoor units will
                 // send to a registered controller, allowing us to reply with any control commands.
                 // Control commands should be sent immediately (per SNET Pro behaviour).
+                LOGD("--CMD C6 received--");
                 if (nonpacket_.src == "c8" && nonpacket_.dst == "d0" && nonpacket_.commandC6.control_status == true)
                 {
                     if (controller_registered == false)
@@ -890,6 +891,7 @@ namespace esphome
                     {
                         // We know the outdoor unit is awake due to this request_control message, so we only
                         // need to check that the indoor unit is awake.
+                        LOGD("--Daten werden gesendet--");
                         send_requests(target);
                     }
                 }
@@ -986,3 +988,4 @@ namespace esphome
         }
     } // namespace samsung_ac
 } // namespace esphome
+
