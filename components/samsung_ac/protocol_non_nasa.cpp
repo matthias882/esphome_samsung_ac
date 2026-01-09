@@ -874,12 +874,12 @@ namespace esphome
                 }
                 target->set_error_code(nonpacket_.src, error_code);
             }
-            else if (nonpacket_.cmd == NonNasaCommand::CmdF8)
+            else if (nonpacket_.cmd == NonNasaCommand::CmdC6)
             {
                 // We have received a request_control message. This is a message outdoor units will
                 // send to a registered controller, allowing us to reply with any control commands.
                 // Control commands should be sent immediately (per SNET Pro behaviour).
-                LOGD("--CMD F8 received--");
+                LOGD("--CMD C6 received--");
                 if (nonpacket_.src == "c8" && nonpacket_.dst == "d0" && nonpacket_.commandC6.control_status == true)
                 {
                     if (controller_registered == false)
@@ -896,6 +896,21 @@ namespace esphome
                     }
                 }
             }
+            else if (nonpacket_.cmd == NonNasaCommand::CmdF8)
+            {
+                // We have received a request_control message. This is a message outdoor units will
+                // send to a registered controller, allowing us to reply with any control commands.
+                // Control commands should be sent immediately (per SNET Pro behaviour).
+                LOGD("--CMD F8 received--");
+                if (indoor_unit_awake)
+                {
+                    // We know the outdoor unit is awake due to this request_control message, so we only
+                    // need to check that the indoor unit is awake.
+                    LOGD("--Daten werden gesendet--");
+                    send_requests(target);
+                }
+            }
+                
             else if (nonpacket_.cmd == NonNasaCommand::Cmd54 && nonpacket_.dst == "d0")
             {
                 // We have received a control_acknowledgement message. This message will come from an
@@ -988,5 +1003,6 @@ namespace esphome
         }
     } // namespace samsung_ac
 } // namespace esphome
+
 
 
