@@ -887,13 +887,6 @@ namespace esphome
                         LOGD("Controller registered");
                         controller_registered = true;
                     }
-                    if (indoor_unit_awake)
-                    {
-                        // We know the outdoor unit is awake due to this request_control message, so we only
-                        // need to check that the indoor unit is awake.
-                        LOGD("--Daten werden gesendet--");
-                        send_requests(target);
-                    }
                 }
             }
             else if (nonpacket_.cmd == NonNasaCommand::CmdF8)
@@ -1003,6 +996,7 @@ namespace esphome
         }
     } // namespace samsung_ac
 } // namespace esphome
+
 
 
 
