@@ -900,6 +900,7 @@ namespace esphome
                     // We know the outdoor unit is awake due to this request_control message, so we only
                     // need to check that the indoor unit is awake.
                     LOGD("--Daten werden gesendet--");
+                    delay(20);
                     send_requests(target);
                 }
             }
@@ -996,6 +997,7 @@ namespace esphome
         }
     } // namespace samsung_ac
 } // namespace esphome
+
 
 
 
