@@ -879,7 +879,6 @@ namespace esphome
                 // We have received a request_control message. This is a message outdoor units will
                 // send to a registered controller, allowing us to reply with any control commands.
                 // Control commands should be sent immediately (per SNET Pro behaviour).
-                LOGD("--CMD C6 received--");
                 if (nonpacket_.src == "c8" && nonpacket_.dst == "d0" && nonpacket_.commandC6.control_status == true)
                 {
                     if (controller_registered == false)
@@ -887,9 +886,16 @@ namespace esphome
                         LOGD("Controller registered");
                         controller_registered = true;
                     }
+                    if (indoor_unit_awake)
+                    {
+                        // We know the outdoor unit is awake due to this request_control message, so we only
+                        // need to check that the indoor unit is awake.
+                        delay(10);
+                        send_requests(target);
+                    }
                 }
             }
-            else if (nonpacket_.cmd == NonNasaCommand::CmdF8)
+            /*else if (nonpacket_.cmd == NonNasaCommand::CmdF8)
             {
                 // We have received a request_control message. This is a message outdoor units will
                 // send to a registered controller, allowing us to reply with any control commands.
@@ -903,7 +909,7 @@ namespace esphome
                     delay(10);
                     send_requests(target);
                 }
-            }
+            }*/
                 
             else if (nonpacket_.cmd == NonNasaCommand::Cmd54 && nonpacket_.dst == "d0")
             {
@@ -944,6 +950,7 @@ namespace esphome
                 const uint32_t now = millis();
                 if ((int32_t)(now - pending_keepalive_due_ms_) >= 0)
                 {
+                    delay(10);
                     send_register_controller(target);
                     last_keepalive_sent_ms_ = now;
                     pending_keepalive_ = false;
@@ -958,6 +965,7 @@ namespace esphome
             // been confirmed by the outdoor unit.
             if (!controller_registered)
             {
+                delay(10);
                 send_register_controller(target);
             }
 
@@ -990,6 +998,7 @@ namespace esphome
                     indoor_unit_awake = false;
                     item.retry_count++;
                     LOGD("Device is likely sleeping, waking...");
+                    delay(10);
                     send_register_controller(target);
                     break;
                 }
@@ -997,6 +1006,7 @@ namespace esphome
         }
     } // namespace samsung_ac
 } // namespace esphome
+
 
 
 
